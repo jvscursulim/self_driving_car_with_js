@@ -8,25 +8,42 @@ const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
-const N = 100;
+const N = 400;
 const cars = generateCars(N);
 let bestCar = cars[0];
 
 if (localStorage.getItem("bestBrain")){
 
-    bestCar.brain = JSON.parse(localStorage.getItem("bestBrain"));
-}
+    for (let i = 0; i < cars.length; i++){
 
-// const traffic = [new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2)];
+        cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+
+        if (i != 0){
+
+            NeuralNetwork.mutate(cars[i].brain, 0.1);
+        }
+    }
+}
 
 let traffic = [];
+// const number = 3;
+traffic.push(new Car(bestCar.x, (-100), 30, 50, "DUMMY", 2));
+traffic.push(new Car(road.getLaneCenter(0), (-320), 30, 50, "DUMMY", 2));
+traffic.push(new Car(road.getLaneCenter(2), (-320), 30, 50, "DUMMY", 2));
+traffic.push(new Car(bestCar.x, (-130-190-160), 30, 50, "DUMMY", 2));
+traffic.push(new Car(road.getLaneCenter(0), (-320-190-320), 30, 50, "DUMMY", 2));
+traffic.push(new Car(road.getLaneCenter(2), (-320-190-320), 30, 50, "DUMMY", 2));
 
-for (let i = 0; i < 3; i++){
+// for (let i = 0; i < number; i++){
 
-    let rngNumber1 = getRndInterger(0, road.laneCount);
-    let rngNumber2 = getRndInterger(1,5);
-    traffic.push(new Car(road.getLaneCenter(rngNumber1), rngNumber2*(-120), 30, 50, "DUMMY", 2));
-}
+//     let rngNumber1 = getRndInterger(0, road.laneCount);
+//     let rngNumber2 = getRndInterger(1,5);
+
+//     traffic.push(new Car(road.getLaneCenter(rngNumber1), rngNumber2*(-150), 30, 50, "DUMMY", 2));
+
+//     // traffic.push(new Car(bestCar.x, -150, 30, 50, "DUMMY", 2));
+
+// }
 
 animate();
 
@@ -43,11 +60,11 @@ function discard(){
 function generateCars(N){
 
     const cars = [];
-    const lane = getRndInterger(0, road.laneCount);
+    // const lane = getRndInterger(0, road.laneCount);
 
     for (let i = 1; i <= N; i++){
 
-        cars.push(new Car(road.getLaneCenter(lane), 100, 30, 50, "AI"));
+        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI"));
     }
 
     return cars;
@@ -65,7 +82,7 @@ function animate(time){
         cars[i].update(road.borders, traffic);
     }
 
-    const bestCar = cars.find(c=>c.y==Math.min(...cars.map(c=>c.y)));
+    bestCar = cars.find(c=>c.y==Math.min(...cars.map(c=>c.y)));
 
     carCanvas.height = window.innerHeight;
     networkCanvas.height = window.innerHeight;
