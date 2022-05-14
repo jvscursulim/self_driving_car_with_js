@@ -4,6 +4,8 @@
 
 Studies about Neural Networks and Machine Learning with no libraries and using JavaScript.
 
+![Screenshot](screenshot.png)
+
 # References:
 
 [1] freeCodeCamp's video (https://www.youtube.com/watch?v=Rs_rAxEsAvI)
